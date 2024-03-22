@@ -20,82 +20,30 @@ All roman numerals answers should be provided in upper-case.
 */
 
 function convertToRoman(num) {
-    let result = '';
-    const values = {
-        1000: 'M',
-        900: 'CM',
-        500: 'D',
-        400: 'CD',
-        100: 'C',
-        90: 'XC',
-        50: 'L',
-        40: 'XL',
-        10: 'X',
-        9: 'IX',
-        5: 'V',
-        4: 'IV',
-        1: 'I',
-    }
-    if (num >= 1000) {
-        let thousands = Math.floor(num / 1000);
-        num -= thousands * 1000;
-        result += values['1000'].repeat(thousands);
-    }
-    if(num >= 900 && num < 1000) {
-        num -= 900;
-        result += values['900'];
-    }
-    if (num >= 500 && num < 900) {
-      num -= 500;
-      result += values['500'];
-    }
-    if(num >= 400 && num < 500) {
-      num -= 400;
-      result += values['400'];
-    }
-    if (num >= 100 && num < 400) {
-      let hundred = Math.floor(num / 100);
-      num -= 100 * hundred;
-      result += values['100'].repeat(hundred);
-    }
+  const romanNumerals = [
+    { value: 1000, numeral: 'M' },
+    { value: 900, numeral: 'CM' },
+    { value: 500, numeral: 'D' },
+    { value: 400, numeral: 'CD' },
+    { value: 100, numeral: 'C' },
+    { value: 90, numeral: 'XC' },
+    { value: 50, numeral: 'L' },
+    { value: 40, numeral: 'XL' },
+    { value: 10, numeral: 'X' },
+    { value: 9, numeral: 'IX' },
+    { value: 5, numeral: 'V' },
+    { value: 4, numeral: 'IV' },
+    { value: 1, numeral: 'I' }
+  ];
 
-    if(num >= 90 && num < 100) {
-        num -= 90;
-        result += values['90'];
-    }
-    if (num >= 50 && num < 90) {
-      num -= 50;
-      result += values['50'];
-    }
-    if (num >= 40 && num < 50){
-      num -= 40;
-      result += values['40'];
-    }
-    if(num >= 10 && num < 40) {
-        let decimal = Math.floor(num / 10);
-        num -= decimal * 10;
-        result += values['10'].repeat(decimal);
-    }
-    if (num < 10) {
-        if(num === 9) {
-            num -= 9;
-            result += values['9'];
-        }
-        if(num >= 5 && num < 9) {
-            num -= 5;
-            result += values['5'];
-        }
-        if(num === 4) {
-            num -= 4;
-            result += values['4'];
-        }
-        if(num >= 1 && num < 4) {
-            let eq = Math.floor(num / 1);
-            num -= eq;
-            result += values['1'].repeat(eq);
-        }
-    }
+  let result = '';
 
-    return result;
+  for (let i = 0; i < romanNumerals.length; i++) {
+    while (num >= romanNumerals[i].value) {
+      result += romanNumerals[i].numeral;
+      num -= romanNumerals[i].value;
+    }
+  }
+
+  return result;
 }
-convertToRoman(36);
