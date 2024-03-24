@@ -123,8 +123,14 @@ function checkCashRegister(price, cash, cid) {
               }
         });
       }
+      valuesOfMoney.reverse();
+      valuesOfMoney.forEach(item => {
+        if(needToChange > item.value && needToChange < item.value * item.amount ) {
+            variantsOfResult.more.change.push([item.name, needToChange]);
+            return variantsOfResult.more;
+        }
+      });
     }
-    console.log(valuesOfMoney)
   }
   
   checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
