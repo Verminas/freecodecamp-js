@@ -57,41 +57,62 @@ function checkCashRegister(price, cash, cid) {
   const valuesOfMoney = [
     {
       name: "PENNY",
-      value: 0.01
+      value: 0.01,
+      amount: null,
     },
     {
       name: "NICKEL",
-      value: 0.05
+      value: 0.05,
+      amount: null,
     },
     {
       name: "DIME",
-      value: 0.1
+      value: 0.1,
+      amount: null,
     },
     {
       name: "QUARTER",
-      value: 0.25
+      value: 0.25,
+      amount: null,
     },
     {
       name: "ONE",
-      value: 1
+      value: 1,
+      amount: null,
     },
     {
       name: "FIVE",
-      value: 5
+      value: 5,
+      amount: null,
     },
     {
       name: "TEN",
-      value: 10
+      value: 10,
+      amount: null,
     },
     {
       name: "TWENTY",
-      value: 20
+      value: 20,
+      amount: null,
     },
     {
       name: "ONE HUNDRED",
-      value: 100
+      value: 100,
+      amount: null,
     },
   ];
+
+  let needToChange = +(cash - price).toFixed(2);
+  let allMoneyInCid = 0;
+  for (let bills of cid) {
+    allMoneyInCid += bills[1];
+    Math.round(allMoneyInCid);
+  }
+  allMoneyInCid = +allMoneyInCid.toFixed(2);
+  
+  if(needToChange > allMoneyInCid) {
+    return variantsOfResult.less;
+  }
 }
 
 checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
