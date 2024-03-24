@@ -38,10 +38,22 @@ See below for an example of a cash-in-drawer array:
 */
 
 function checkCashRegister(price, cash, cid) {
-  const result = {
-    status: null,
-    change: null,
+  const variantsOfResult = {
+    less: {
+    status: "INSUFFICIENT_FUNDS",
+    change: [],
+  },
+  equial: {
+    status: "CLOSED",
+    change: [],
+  },
+  more: {
+    status: "OPEN",
+    change: [],
+  }
+
   };
+  
   const valuesOfMoney = [
     {
       name: "PENNY",
