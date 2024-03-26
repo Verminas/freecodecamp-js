@@ -38,99 +38,122 @@ See below for an example of a cash-in-drawer array:
 */
 
 function checkCashRegister(price, cash, cid) {
-    const variantsOfResult = {
-      less: {
+  const variantsOfResult = {
+    less: {
       status: "INSUFFICIENT_FUNDS",
       change: [],
     },
-    equial: {
+    equal: {
       status: "CLOSED",
-      change: [],
+      change: cid,
     },
     more: {
       status: "OPEN",
       change: [],
-    }
-  
-    };
-    
-    const valuesOfMoney = [
-      {
-        name: "PENNY",
-        value: 0.01,
-        amount: null,
-      },
-      {
-        name: "NICKEL",
-        value: 0.05,
-        amount: null,
-      },
-      {
-        name: "DIME",
-        value: 0.1,
-        amount: null,
-      },
-      {
-        name: "QUARTER",
-        value: 0.25,
-        amount: null,
-      },
-      {
-        name: "ONE",
-        value: 1,
-        amount: null,
-      },
-      {
-        name: "FIVE",
-        value: 5,
-        amount: null,
-      },
-      {
-        name: "TEN",
-        value: 10,
-        amount: null,
-      },
-      {
-        name: "TWENTY",
-        value: 20,
-        amount: null,
-      },
-      {
-        name: "ONE HUNDRED",
-        value: 100,
-        amount: null,
-      },
-    ];
-  
-    let needToChange = +(cash - price).toFixed(2);
-    let allMoneyInCid = 0;
-    for (let bills of cid) {
-      allMoneyInCid += bills[1];
-      Math.round(allMoneyInCid);
-    }
-    allMoneyInCid = +allMoneyInCid.toFixed(2);
-    
-    if(needToChange > allMoneyInCid) {
-      return variantsOfResult.less;
-    } else if(needToChange === allMoneyInCid) {
-      variantsOfResult.equial.change = cid;
-      return variantsOfResult.equial;
-    } else {
-      for (let [name, num] of cid) {
-        valuesOfMoney.forEach(item => {
-            if(name === item.name) {
-                item.amount = Math.round(num / item.value);
-              }
-        });
-      }
-      valuesOfMoney.reverse();
-      valuesOfMoney.forEach(item => {
-        if(needToChange > item.value && needToChange < item.value * item.amount ) {
-            variantsOfResult.more.change.push([item.name, needToChange]);
-            return variantsOfResult.more;
+    },
+  };
+
+  const valuesOfMoney = [
+    {
+      name: "PENNY",
+      value: 0.01,
+      amount: null,
+    },
+    {
+      name: "NICKEL",
+      value: 0.05,
+      amount: null,
+    },
+    {
+      name: "DIME",
+      value: 0.1,
+      amount: null,
+    },
+    {
+      name: "QUARTER",
+      value: 0.25,
+      amount: null,
+    },
+    {
+      name: "ONE",
+      value: 1,
+      amount: null,
+    },
+    {
+      name: "FIVE",
+      value: 5,
+      amount: null,
+    },
+    {
+      name: "TEN",
+      value: 10,
+      amount: null,
+    },
+    {
+      name: "TWENTY",
+      value: 20,
+      amount: null,
+    },
+    {
+      name: "ONE HUNDRED",
+      value: 100,
+      amount: null,
+    },
+  ];
+
+  let needToChange = +(cash - price).toFixed(2);
+  let allMoneyInCid = 0;
+
+  for (let bill of cid) {
+    allMoneyInCid += bill[1];
+  }
+
+  allMoneyInCid = +allMoneyInCid.toFixed(2);
+
+  if (needToChange > allMoneyInCid) {
+    return variantsOfResult.less;
+  } else if (needToChange === allMoneyInCid) {
+    return variantsOfResult.equal;
+  } else {
+    for (let [name, num] of cid) {
+      valuesOfMoney.forEach((item) => {
+        if (name === item.name) {
+          item.amount = Math.round(num / item.value);
         }
       });
     }
+
+    valuesOfMoney.reverse();
+
+    for (let item of valuesOfMoney) {
+      if (needToChange >= item.value && item.amount > 0) {
+        let change = 0;
+        while (needToChange >= item.value && item.amount > 0) {
+          change += item.value;
+          item.amount--;
+          needToChange -= item.value;
+          needToChange = +needToChange.toFixed(2);
+        }
+        variantsOfResult.more.change.push([item.name, change]);
+      }
+    }
+
+    if (needToChange > 0) {
+      return variantsOfResult.less;
+    }
+
+    return variantsOfResult.more;
   }
-  
-  checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
+}
+
+  checkCashRegister(19.5, 20, [
+    ["PENNY", 0.01],
+    ["NICKEL", 0],
+    ["DIME", 0],
+    ["QUARTER", 0],
+    ["ONE", 1],
+    ["FIVE", 0],
+    ["TEN", 0],
+    ["TWENTY", 0],
+    ["ONE HUNDRED", 0],
+  ]);
